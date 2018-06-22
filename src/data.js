@@ -34,9 +34,9 @@ filterButton.addEventListener("click", function () {
       let paintTable = ''
       paintTable += '<tr>';
       paintTable += '<th>Name</th>';
-      paintTable += '<th>%Exercises</th>';
-      paintTable += '<th>%Reads</th>';
-      paintTable += '<th>%Quizzes</th>';
+      paintTable += '<th>%Completitud</th>';
+      paintTable += '<th>%Ejercicios</th>';
+      paintTable += '<th>%Lecturas</th>';
       paintTable += '</tr>';
       paintTable += '<tr>';
       const filterRoles = users.filter(user => (user.role === "student"));
@@ -52,9 +52,20 @@ filterButton.addEventListener("click", function () {
       .then((progress) => {
         for (i = 0; i < filterRoles.length; i++){
           if (progress.hasOwnProperty(filterRoles[i].id)){
-          console.log(progress[filterRoles[i].id].intro)
+            let abc = progress[filterRoles[i].id]; 
+            console.log (progress[filterRoles[i].id])
+            if (abc.hasOwnProperty('intro')) {
+              let abcd = abc.intro;
+              console.log(abc.intro)
+              if(abcd.hasOwnProperty('percent')){
         
-        }}
+                console.log(abcd.percent)
+    
+              }
+      
+            }      
+        }
+      }
 
         
         
