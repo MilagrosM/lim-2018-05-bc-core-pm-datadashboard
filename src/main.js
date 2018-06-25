@@ -42,26 +42,16 @@ studentsButton.addEventListener('click',function(){
 
 filterButton.addEventListener("click", function () {
   let value = selectCohorts.options[selectCohorts.selectedIndex].text
-  if (value === 'lim-2018-03-pre-core-pw') { 
-    fetch(url2)
-    .then((response) => {
-      return response.json();
-    })
-    .then((users) => { 
-      computeUsersStats(users, progress)
-    })
+  if (value === 'lim-2018-03-pre-core-pw') {
 
-    const fetchRequest = [];
-    fetchRequest.push(fetch(url2));
-    fetchRequest.push(fetch(url3));
-    Promise.all(fetchRequest).then((responses) => {
-      let prueba = responses.map(response => response.json());
-      console.log(prueba)
-      return prueba
-    })
-    .then((users=url2.users[id], progress) =>{
-      computeUsersStats(users, progress)
-    })
+fetch(url1)
+  .then((response) => {
+    return response.json();
+  })
+  .then((users, progress) => { 
+    computeUsersStats(users, progress)
+  })
+
   } else {
     console.log("No hay data")
   }
@@ -80,7 +70,25 @@ filterButton.addEventListener("click", function () {
 
 
 
+const fetchRequest = [];
+fetchRequest.push(fetch(url2));
+fetchRequest.push(fetch(url3));
 
+Promise.all(fetchRequest).then((responses) => {
+  return responses.map(response => response.json())
+}).then((result) => {
+  computeUsersStats (result[0,result[1]])
+  
+  /*prueba1 = result[0];
+  prueba2 = result[1];*/
+  
+
+})
+let process = (prom) => {
+  prom.then((users, progress) => {
+    computeUsersStats(users, progress)
+  })
+} 
 
 
 /*

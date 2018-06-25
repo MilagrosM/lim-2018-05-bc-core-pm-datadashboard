@@ -33,7 +33,7 @@ console.assert(movie.stars[2] === 'Lea Thompson'); */
 
 /*Crea la lista de usuarios a pintar y devuelve un array de usuarios 
 (llamado usersWithStats) que tiene la propiedad stats (que es un objeto)*/
-window.computeUsersStats = (users, progress/*, courses*/) => {
+window.computeUsersStats = (users, progress) => {
   let usersWithStats = users.filter(user => (user.role === 'student'));
   //Stats properties
   let gPercent = 1;
@@ -82,6 +82,7 @@ window.computeUsersStats = (users, progress/*, courses*/) => {
     console.log(usersWithStats[i].name)
     paintTable += '<td>' + usersName[i] + '</td>'
     paintTable += '</tr>';
+    console.log(progress)
     /*if (progress.hasOwnProperty(usersWithStats[i].id)){
       let abc = progress[usersWithStats[i].id]; 
       console.log (progress[usersWithStats[i].id])
