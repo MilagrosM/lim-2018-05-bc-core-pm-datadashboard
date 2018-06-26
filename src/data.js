@@ -34,6 +34,7 @@ console.assert(movie.stars[2] === 'Lea Thompson'); */
 /*Crea la lista de usuarios a pintar y devuelve un array de usuarios 
 (llamado usersWithStats) que tiene la propiedad stats (que es un objeto)*/
 window.computeUsersStats = (users, progress) => {
+  // Se realiza un filtro de rol para obtener solo data de estudiantes
   let usersWithStats = users.filter(user => (user.role === 'student'));
   //Stats properties
   let gPercent = 1;
@@ -48,7 +49,7 @@ window.computeUsersStats = (users, progress) => {
   let qPercent = 10;
   let qScoreSum = 11;
   let qScoreAvg = 12;
-  usersWithStats.forEach(object => {object.stats = {
+    usersWithStats.forEach(object => {object.stats = {
     percent: gPercent,
     exercises: {
       total: eTotal,
@@ -68,39 +69,80 @@ window.computeUsersStats = (users, progress) => {
       scoreAvg: qScoreAvg,
     }
   }})
-  console.log(usersWithStats)
+
   let paintTable = ''
   paintTable += '<tr>';
   paintTable += '<th>Name</th>';
-  paintTable += '<th>%Completitud</th>';
-  paintTable += '<th>%Ejercicios</th>';
-  paintTable += '<th>%Lecturas</th>';
+  paintTable += '<th>%C. General</th>';
+  paintTable += '<th>%C. Ejercicios</th>';
+  paintTable += '<th>%C. Lecturas</th>';
+  paintTable += '<th>%C. Quizzes</th>';
   paintTable += '</tr>';
-    
+
+  // Se hace un recorrido por users para ir tomando los nombres de cada usuario
   for (i = 0; i < usersWithStats.length; i++) {
     let usersName = usersWithStats.map (usersWithStat => `${usersWithStat.name}`);
-    console.log(usersWithStats[i].name)
     paintTable += '<tr>'; 
+    // Pinta nombres 
     paintTable += '<td>' + usersName[i] + '</td>'
-   
-    if (progress.hasOwnProperty(users[i].id)) {
-      let a = progress[usersWithStats[i].id]; 
-      if (a.hasOwnProperty('intro')) {
-        let bcourseintro = a.intro.units
-        console.log(bcourseintro)
+    //Se accede a progress utilizando el ID de cada user
+    //Se pregunta si progress tiene esa propiedad
+    if (progress.hasOwnProperty(usersWithStats[i].id)) {
+      let userProgress = progress[usersWithStats[i].id];
+        if (userProgress.hasOwnProperty('intro')) {
+        gPercent = userProgress.intro.percent;
+        //Pinta porcentaje de completitud general
+        paintTable += '<td>' + gPercent + '</td>';
+        ePercent = userProgress.intro.units['01-introduction'].parts;
+        let ePercentarray = Object.values(ePercent);
+        console.log(ePercentarray[i].type);
+        //console.log(typeof(ePercentarray));
+        //if(ePercentarr)
 
+        //if(userProgress.hasOwnProperty('percent'))
+        //console.log(userProgress.intro.units)
         }
 
       }
-    
+    }
 
-    }     
+
+
+
+
+
+      
   
 
 
   usersList.innerHTML = paintTable
   //return usersWithStats
 }
+
+/*for (i = 0; i < users.length; i++) {
+  if (users[i].role === "student") {
+    output += '<tr>';
+    output += '<td id= "nombrestabla">' + users[i].name + '</td>';
+    if (progress.hasOwnProperty(users[i].id)) {
+      const progressUser = progress[users[i].id];
+      if (progressUser.hasOwnProperty('intro')) {
+        const intro = progressUser.intro;
+        const unitIntroduction = intro.units['01-introduction'];
+        const unitVariables = intro.units['02-variables-and-data-types'];
+        const unitUx = intro.units['03-ux-design'];
+        const resultadoExecises = unitVariables.parts['06-exercises'].completed;
+        const resultadoQuiz = unitIntroduction.parts['04-quiz'].completed + unitVariables.parts['05-quiz'].completed + unitUx.parts['03-quiz'].completed;
+        const resultadoLecturas = unitIntroduction.parts['00-welcome-and-orientation'].completed + unitIntroduction.parts['01-growth-mindset'].completed + unitIntroduction.parts['02-why-learn-to-code'].completed + unitIntroduction.parts['03-your-first-website'].completed + unitVariables.parts['00-values-data-types-and-operators'].completed + unitVariables.parts['01-variables'].completed + unitVariables.parts['02-self-learning-MDN'].completed + unitVariables.parts['03-comments'].completed + unitUx.parts['00-development-team'].completed + unitUx.parts['01-ux-design'].completed + unitUx.parts['02-ux-design-vs-ui-design'].completed;
+        if (intro.hasOwnProperty('percent')) {
+          output += '<td>' + intro.percent + '</td>';
+          output += '<td>' + resultadoExecises * 100 + '</td>';
+          output += '<td>' + parseInt(resultadoQuiz * 100 / 3) + '</td>';
+          output += '<td>' + parseInt(resultadoLecturas * 100 / 11) + '</td>';
+          output += '</tr>';*/
+
+
+
+
 
   /*let userWithStats = [
     {
@@ -168,7 +210,18 @@ let options = {
 
 
 
-
+/*const populateSedesSelect = () => {
+  cohorts.forEach(cohort => {
+    //
+    const optionSede = document.createElement('OPTION');
+    optionSede.innerHTML = cohort;
+    let attSedes = document.createAttribute('value')
+    attSedes.value = cohort;
+    optionSede.se
+    sedes.appendChild(optionSede)
+    console.log(cohort)
+  })
+}*/
 
 
 

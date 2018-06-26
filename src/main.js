@@ -64,8 +64,8 @@ filterButton.addEventListener("click", function () {
     .then(response => {
       users = JSON.parse(response[0]);
       progress = JSON.parse(response[1]);
-      console.log(users)
-      console.log(progress)
+      //console.log(users)
+      //console.log(progress)
 
       computeUsersStats(users, progress)
 
