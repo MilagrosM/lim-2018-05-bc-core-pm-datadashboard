@@ -76,33 +76,26 @@ window.computeUsersStats = (users, progress) => {
   paintTable += '<th>%Ejercicios</th>';
   paintTable += '<th>%Lecturas</th>';
   paintTable += '</tr>';
-  paintTable += '<tr>';   
+    
   for (i = 0; i < usersWithStats.length; i++) {
     let usersName = usersWithStats.map (usersWithStat => `${usersWithStat.name}`);
     console.log(usersWithStats[i].name)
+    paintTable += '<tr>'; 
     paintTable += '<td>' + usersName[i] + '</td>'
-    paintTable += '</tr>';
-    console.log(progress)
-    /*if (progress.hasOwnProperty(usersWithStats[i].id)){
-      let abc = progress[usersWithStats[i].id]; 
-      console.log (progress[usersWithStats[i].id])
-      if (abc.hasOwnProperty('intro')) {
-        let abcd = abc.intro;
-        console.log(abc.intro)
-        if(abcd.hasOwnProperty('percent')){
-          let abcde = abcd.percent;
-          paintTable += '<td>' + abcde[i] + '</td>';
-          paintTable += '</tr>';
-  
-          console.log(abcd.percent)
+   
+    if (progress.hasOwnProperty(users[i].id)) {
+      let a = progress[usersWithStats[i].id]; 
+      if (a.hasOwnProperty('intro')) {
+        let bcourseintro = a.intro.units
+        console.log(bcourseintro)
 
         }
 
       }
     
 
-    }*/      
-  }
+    }     
+  
 
 
   usersList.innerHTML = paintTable
