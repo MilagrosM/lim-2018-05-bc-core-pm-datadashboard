@@ -77,24 +77,6 @@ filterButton.addEventListener("click", function () {
 })
 
 
-/*Promise.all(urls.map(url => fetch(url)))
-.then(response => Promise.all(response.map(data => data.text())))
-.then(response => {
-      cohorts = JSON.parse(response[0]);
-      progress = JSON.parse(response[1]);
-      users = JSON.parse(response[2]);
-      let courses = [];
-      cohorts.map(
-          cohort => {
-              if(cohort.id == 'lim-2018-03-pre-core-pw'){
-                  //courses.push(cohort.coursesIndex);
-                  for(key in cohort.coursesIndex){
-                      courses.push(key);
-                  }
-              }
-          }
-      );*/
-
 
 
 
