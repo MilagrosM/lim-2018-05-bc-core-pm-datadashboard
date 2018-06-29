@@ -46,19 +46,7 @@ let progress =[]
 filterButton.addEventListener("click", function () {
   let value = selectCohorts.options[selectCohorts.selectedIndex].text
   if (value === 'lim-2018-03-pre-core-pw') {
-    /*urls.push(fetch(url2));
-    urls.push(fetch(url3));
-    Promise.all(urls).then((responses) => {
-      return responses.map(response => response.json());
-    }).then((responses) => {
-      console.log(responses)
-      users = JSON.parse(responses[0]);
-      progress = JSON.parse(responses[1])
-      computeUsersStats(users,progress)
 
-    
-    }
-    )*/
     Promise.all(urls.map(url => fetch(url)))
     .then(response => Promise.all(response.map(data => data.text())))
     .then(response => {
