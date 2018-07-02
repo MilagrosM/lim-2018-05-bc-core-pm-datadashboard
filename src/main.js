@@ -13,20 +13,23 @@ const urls = [url2, url3];
 //Buttons
 let loginButton = document.getElementById('login_button');
 let studentsButton = document.getElementById('students_button');
-let filterButton = document.getElementById('filter_button');
+
 
 let selectCohorts = document.getElementById('select_cohorts');
+let selectOrderBY = document.getElementById('select_orderBy')
 let usersList = document.getElementById('users_list');
+let tableScroll = document.getElementById('table_scroll')
+
 
 //Events
-loginButton.addEventListener('click',function(){
+loginButton.addEventListener('click',() => {
   view1.style.display = "none";
   view2.style.display = "block";
   header.style.display = "block";
   view3.style.display = "none";
 });
 
-studentsButton.addEventListener('click',function(){
+studentsButton.addEventListener('click',() => {
   view1.style.display = "none";
   view2.style.display = "none";
   header.style.display = "block";
@@ -43,8 +46,9 @@ studentsButton.addEventListener('click',function(){
 let users =[]
 let progress =[]
 
-filterButton.addEventListener("click", function () {
-  let value = selectCohorts.options[selectCohorts.selectedIndex].text
+selectCohorts.addEventListener("change", (e) => {
+  tableScroll.style.display = "block";
+  let value = e.target.value;
   if (value === 'lim-2018-03-pre-core-pw') {
 
     Promise.all(urls.map(url => fetch(url)))
@@ -61,8 +65,33 @@ filterButton.addEventListener("click", function () {
 
   } else {
     console.log("No hay data")
+    tableScroll.style.display = "none";
   }
 })
+
+selectOrderBY.addEventListener("change", (e) => {
+
+  let value = e.target.value;
+  if (value === 'lim-2018-03-pre-core-pw') {
+
+    Promise.all(urls.map(url => fetch(url)))
+    .then(response => Promise.all(response.map(data => data.text())))
+    .then(response => {
+      users = JSON.parse(response[0]);
+      progress = JSON.parse(response[1]);
+      //console.log(users)
+      //console.log(progress)
+
+      computeUsersStats(users, progress)
+
+    })
+
+  } else {
+    console.log("No hay data")
+    tableScroll.style.display = "none";
+  }
+})
+
 
 
 

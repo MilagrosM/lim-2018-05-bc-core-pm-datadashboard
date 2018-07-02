@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -16,36 +15,52 @@
         <input type = "text">
         <div>Ingresa tu clave</div>
         <input type="password" name="password" id = "login_password">
-        <div id = "forg_pass">¿Olvidaste tu clave?</div>
+        <br>
         <button id = "login_button">Login</button>
+        <div id = "forg_pass">¿Olvidaste tu clave?</div>
       </div>
     </section>
     <div id = "header">
       <div id = "img_container1"><img src="img/Laboratoria_CMYK_logo-04.png" alt="logolab" id = "logo_img1"></div>
-      <div>Hola Ale</div>
+      <div>Hola Alejandra</div>
       <div id = "img_container2"><img src="img/usuario.png" alt="tm" id = "tm_img"></div>
       <button id = "cohorts_button">Cohorts</button>
       <br>
       <button id = "students_button">Students</button>
     </div>
+    
     <section id = "view_2">
-      <div id = "principal_container">
+        <div id = "brackets_container1"><img src="img/corchetes1.png" alt="corchetes" id = "brackets_1"></div>
         <div id = "title" >Plataforma de Progreso</div>
-      </div>
+        <div id = "brackets_container2"><img src="img/corchetes2.png" alt="corchetes" id = "brackets_2"></div>
     </section>
 
     <section id = "view_3">
-        <select name="select" id="select_cohorts"></select>
-        <button id = "filter_button">Filtrar</button>
-        <div>
-            <table id = "users_list"></table>
-            <div></div>
+      <div id = "view_container3">
+        <div id = "title_2">Plataforma de Progreso</div>
+        <br>
+        <div class = "text_view3">Cohorts</div>
+        <div class="select-box">
+          <select name="select1" id="select_cohorts"></select>
         </div>
-        
+        <div class = "text_view3">Ordenar por:</div>
+        <div class="select-box">
+          <select name="select2" id="select_orderBy">
+            <option value="Nombre">Nombre</option>
+            <option value="CompletitudGeneral">Completitud General</option>
+            <option value="CompletitudEjercicios">Completitud Ejercicios</option>
+            <option value="CompletitudLecturas">Completitud Lecturas</option>
+            <option value="CompletitudQuizzes">Completitud Quizzes</option>
+            <option value="PuntuacionPromedio">Puntuación Promedio</option>
+          </select>
+        </div>
+      </div>  
+        <div id = "table_scroll">
+          <table id = "users_list"></table>
+        </div> 
     </section>
     <script src="data.js"></script>
     <script src="main.js"></script>
-
   </body>
 </html>
 

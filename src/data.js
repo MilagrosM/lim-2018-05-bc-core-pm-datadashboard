@@ -1,4 +1,3 @@
-
 window.computeUsersStats = (users, progress) => {
   // Se realiza un filtro de rol para obtener solo data de estudiantes
   let usersWithStats = users.filter(user => (user.role === 'student'));
@@ -14,6 +13,7 @@ window.computeUsersStats = (users, progress) => {
   paintTable += '<th>%C. Ejercicios</th>';
   paintTable += '<th>%C. Lecturas</th>';
   paintTable += '<th>%C. Quizzes</th>';
+  paintTable += '<th>Puntuacion Promedio</th>';
   paintTable += '</tr>';
   
   // Hago un for para recorrer el array de users con roles de student
@@ -25,37 +25,98 @@ window.computeUsersStats = (users, progress) => {
     if (progress.hasOwnProperty(usersWithStats[i].id)) {
       // Nuevo array que guarda los progresos de cada user
       let userProgress = progress[usersWithStats[i].id];
-        if (userProgress.hasOwnProperty('intro')) {
-        let gPercent = userProgress.intro.percent;
-        // Pinta porcentaje de completitud general por cada estudiante
-        paintTable += '<td>' + gPercent + '</td>';
-        paintTable += '</tr>';
-        // Ahora debo pintar porcentaje de completitud de ejercicios, para lo cual 1ro debo acceder a las unidades      
+      if (userProgress.hasOwnProperty('intro')) {          
+        // 1ro debo acceder a las unidades ({}), contenidas en un objeto general
         let unitsObj = userProgress.intro.units
-        // Ahora obtengo los valores de cada unidad en un array
-        let unitsArr = Object.values(unitsObj)
-        // Recorro dicho array para acceder a las partes
-        for(j=0; j<unitsArr.length ; j++){    
-          let partsObj = unitsArr[j].parts
-          console.log(partsObj)
-          let partsArr = Object.values(partsObj)
-          console.log(partsArr)
-          for (h=0; h<partsArr.length ; h++){
-            //Exercises
-            if(partsArr[h].type === 'practice'){
-              //let completedCounter = partsArr[h].completed
-              let completedSum = 0
-              //let ePercent = 
-              completedSum = completedSum + partsArr[h].completed;
-              //suma = suma + arreglo[i];
-              console.log(completedSum)
-            }
-           let completedObj = partsArr[h].completed
-            console.log(completedObj)
-          }
-        }
-        // Rec
+        // console.log(unitsObj)
 
+        // 2do debo obtener las unidades({}) en un array 
+        let unitsArr = Object.values(unitsObj)
+        //console.log(unitsArr)
+
+        // 3ro debo obtener las partes({}) de cada unidad en un array
+        let partsArr = unitsArr.map(unit => unit.parts);
+        //console.log(partsArr)
+
+        // 4to debo obtener las propiedades de cada parte  
+        let propArr = partsArr.map(partsArr => Object.values(partsArr)) // (obtendré 3 array, uno por cada unidad) 
+        //console.log(propArr)
+
+        // 5to debo obtener un solo array de propiedades de cada parte 
+        let allPropArr = [].concat.apply([],propArr);
+        //console.log(allPropArr)
+
+        //EXERCISES
+        // 6to debo filtrar para ejercicios
+        let practPropArr = allPropArr.filter( practice => (practice.type === "practice"));
+        //console.log(practPropArr)
+        
+        // 7mo debo obtener en un array el valor de los ejercicios completados
+        let practCompArr = practPropArr.map(practPropArr => practPropArr.completed)
+        //console.log(practCompArr)
+       
+        // 8vo debo sumar los valores del array y obtener el porcentaje de completitud ejercicios
+        let pInitial = 0;
+        let pSum =  practCompArr.reduce((sum, current) =>  sum + current, pInitial)
+        //console.log(pSum) 
+        let pPercent = pSum/2*100
+        
+  
+        //LECTURAS
+        let readPropArr = allPropArr.filter(read => (read.type === "read"));
+        //console.log(readPropArr)        
+        let readCompArr = readPropArr.map(readPropArr => readPropArr.completed)
+        //console.log(readCompArr)       
+        let rInitial = 0;
+        let rSum =  readCompArr.reduce((sum, current) =>  sum + current, rInitial)
+        //console.log(rSum) 
+        let rPercent = rSum/11*100
+        
+      
+        //QUIZZES
+        let quizPropArr = allPropArr.filter(quiz => (quiz.type === "quiz"));
+        //console.log(quizPropArr)        
+        let quizCompArr = quizPropArr.map(quizPropArr => quizPropArr.completed)
+        //console.log(quizCompArr)       
+        let qInitial = 0;
+        let qSum =  quizCompArr.reduce((sum, current) =>  sum + current, qInitial)
+        //console.log(rSum) 
+        let qPercent = qSum/3*100
+
+        let quizPoints = quizPropArr.map(quizPropArr => quizPropArr.score)
+        //let points = quizPoints.map(quizPoints => ( quizPoints == isNullOrUndefined))
+        //console.log(quizPoints)
+        let realPoints = quizPoints.map( quizPoints =>{
+          if(typeof quizPoints !== "number") {
+            quizPoints = 0
+          } 
+          return quizPoints
+        })
+        //console.log(realPoints)
+        let qPInitial = 0
+        let qPointsSum = (realPoints.reduce((sum, current) =>  (sum) + (current), qPInitial))
+        let qAvg = qPointsSum/3
+        //console.log(qAvg)
+        
+           
+
+
+
+        
+        //Pintando porcentajes
+        let gPercent = (pPercent + rPercent + qPercent)/3
+        paintTable += '<td>' + gPercent.toFixed(2) + '</td>';
+        paintTable += '<td>' + pPercent.toFixed(2) + '</td>';
+        paintTable += '<td>' + rPercent.toFixed(2) + '</td>';
+        paintTable += '<td>' + qPercent.toFixed(2) + '</td>';
+        paintTable += '<td>' + qAvg.toFixed(2) + '</td>';
+        paintTable += '</tr>';    
+      }
+    }
+  }
+usersList.innerHTML = paintTable
+//return usersWithStats
+}
     /*usersWithStats.forEach(object => {object.stats = {
     percent: gPercent,
     exercises: {
@@ -78,65 +139,60 @@ window.computeUsersStats = (users, progress) => {
   }})*/
 
 
-  // Se hace un recorrido por users para ir tomando los nombres de cada usuario
-  /*for (i = 0; i < usersWithStats.length; i++) {
-    let usersName = usersWithStats.map (usersWithStat => `${usersWithStat.name}`);
-    paintTable += '<tr>'; 
-    // Pinta nombres 
-    paintTable += '<td>' + usersName[i] + '</td>'
-    //Se accede a progress utilizando el ID de cada user
-    //Se pregunta si progress tiene esa propiedad
-    if (progress.hasOwnProperty(usersWithStats[i].id)) {
-      let userProgress = progress[usersWithStats[i].id];
-        if (userProgress.hasOwnProperty('intro')) {
-        gPercent = userProgress.intro.percent;
-        //Pinta porcentaje de completitud general por cada estudiante
-        paintTable += '<td>' + gPercent + '</td>';
-        
-        ePercent = userProgress.intro.units/*['01-introduction'].parts;
-        let ePercentarray = Object.values(ePercent);
-       
-        let a = ePercentarray[0].parts;
-        let b = Object.values(a)
-        console.log(b[0].completed)
-        console.log(b)
-
-
-
-        console.log(ePercentarray[0].parts); // prototype array
-        console.log(ePercent)// prototype object
-        console.log(typeof(ePercent));
-        //console.log(typeof(ePercentarray));
-        //if(ePercentarr)
-
-        //if(userProgress.hasOwnProperty('percent'))
-        //console.log(userProgress.intro.units)
-        }
-
-      }
-    }*/
-
-
-
-
-
-
-      
-  
-  }
-  }
-    }
-  usersList.innerHTML = paintTable
-  //return usersWithStats
-}
-
 window.processCohortData = (cohorts) => {
   let paintCohorts = '';
   for (i = 0; i < cohorts.length; i++) {
-    paintCohorts += '<option value="' + i + '">' + cohorts[i].id + '</option>';
+    paintCohorts += '<option value="' + cohorts[i].id + '">' + cohorts[i].id + '</option>';
   }
   selectCohorts.innerHTML = paintCohorts;
 }
+
+
+/*window.sortUsers = (users, orderBy, orderDirection) => {
+  if(orderBy === "Nombre") {
+    users.sort((a, b) => {
+      if (a.name > b.name) {
+        return 1;
+      }
+      if (a.name < b.name) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+  
+  }
+
+  if(orderBy === "Completitudgeneral") {
+    users.sort((a, b) => {
+      if (a.name > b.name) {
+        return 1;
+      }
+      if (a.name < b.name) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+  
+  }
+
+  if(orderBy === "CompletitudEjercicios") {
+    users.sort((a, b) => {
+      if (a.name > b.name) {
+        return 1;
+      }
+      if (a.name < b.name) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+  
+  }
+
+
+  }*/
 
 
 
